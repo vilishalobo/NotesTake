@@ -1,46 +1,92 @@
+# --- 1. BACKEND DEPLOYMENT ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: notestake-backend
 spec:
-  replicas: 4  # This creates your 4 identical app instances
+  replicas: 2
   selector:
     matchLabels:
-      app: notestake
+      app: notestake-backend
   template:
     metadata:
       labels:
-        app: notestake
+        app: notestake-backend
     spec:
       imagePullSecrets:
-      - name: ghcr-login-secret
+        - name: ghcr-login-secret
       containers:
-      - name: notestake-app
-        image: ghcr.io/vilishalobo/notestake-ai:latest
-        ports:
-        - containerPort: 5000
-        env:
-          # Mapping your Node.js environment variables to the K8s Secret
-          - name: MONGO_URI
-            valueFrom:
-              secretKeyRef:
-                name: notestake-env-vault
-                key: MONGO_URI
-          - name: GEMINI_API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: notestake-env-vault
-                key: GEMINI_API_KEY
+        - name: backend-api
+          image: ghcr.io/vilishalobo/notestake-ai:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: mongo-uri
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gemini-secret
+                  key: api-key
+            - name: FIREBASE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-secret
+                  key: api-key
+
 ---
+# --- 2. BACKEND SERVICE (Internal Networking) ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: notestake-service
+  name: notestake-backend-svc
 spec:
-  type: NodePort
   selector:
-    app: notestake
+    app: notestake-backend
   ports:
-    - port: 80         # The port you'll use in your browser
-      targetPort: 5000 # The port your Node.js server.js is listening on
-      nodePort: 30001  # The port to access the app on your local machine
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP
+
+---
+# --- 3. FRONTEND DEPLOYMENT ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notestake-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: notestake-frontend
+  template:
+    metadata:
+      labels:
+        app: notestake-frontend
+    spec:
+      imagePullSecrets:
+        - name: ghcr-login-secret
+      containers:
+        - name: frontend-web
+          image: ghcr.io/vilishalobo/notestake-frontend:latest
+          ports:
+            - containerPort: 80
+
+---
+# --- 4. FRONTEND SERVICE (External Access) ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notestake-frontend-svc
+spec:
+  selector:
+    app: notestake-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer # This makes it accessible at http://localhost
