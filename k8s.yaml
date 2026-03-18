@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notestake-backend
+spec:
+  replicas: 4  # This creates your 4 identical app instances
+  selector:
+    matchLabels:
+      app: notestake
+  template:
+    metadata:
+      labels:
+        app: notestake
+    spec:
+      imagePullSecrets:
+      - name: ghcr-login-secret
+      containers:
+      - name: notestake-app
+        image: ghcr.io/vilishalobo/notestake-ai:latest
+        ports:
+        - containerPort: 5000
+        env:
+          # Mapping your Node.js environment variables to the K8s Secret
+          - name: MONGO_URI
+            valueFrom:
+              secretKeyRef:
+                name: notestake-env-vault
+                key: MONGO_URI
+          - name: GEMINI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: notestake-env-vault
+                key: GEMINI_API_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notestake-service
+spec:
+  type: NodePort
+  selector:
+    app: notestake
+  ports:
+    - port: 80         # The port you'll use in your browser
+      targetPort: 5000 # The port your Node.js server.js is listening on
+      nodePort: 30001  # The port to access the app on your local machine

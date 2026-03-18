@@ -1,0 +1,529 @@
+/* ====================================
+   GLOBAL STYLES & CSS RESET
+   ==================================== */
+
+/* Box-sizing border-box for all elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Root variables for theming */
+:root {
+  /* Colors */
+  --primary-color: #1976d2;
+  --primary-hover: #1565c0;
+  --error-color: #d32f2f;
+  --success-color: #2e7d32;
+  --warning-color: #ed6c02;
+  --background-color: #f4f6f8;
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #121212;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+  }
+  
+  body {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+  }
+}
+
+/* ====================================
+   BASE STYLES
+   ==================================== */
+
+html {
+  font-size: 62.5%; /* 1rem = 10px for easier calculations */
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 1.6rem; /* 16px */
+  line-height: 1.5;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* ====================================
+   TYPOGRAPHY
+   ==================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.2;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+/* ====================================
+   CUSTOM SCROLLBAR
+   ==================================== */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+/* ====================================
+   FOCUS & ACCESSIBILITY
+   ==================================== */
+
+/* Focus styles for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Remove focus outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip to main content link for screen readers */
+.skip-to-main {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+}
+
+.skip-to-main:focus {
+  left: 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--primary-color);
+  color: white;
+}
+
+/* ====================================
+   USER SELECT & CURSOR PREVENTION
+   ==================================== */
+
+/* Prevent text selection on buttons and UI elements */
+button,
+.MuiButton-root,
+.MuiIconButton-root,
+.MuiChip-root {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+/* Prevent text selection on all Typography components */
+.MuiTypography-root {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow selection only on note content */
+.MuiCardContent-root .MuiTypography-root {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Allow selection in input fields and editable content */
+input,
+textarea,
+[contenteditable="true"],
+.ql-editor {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Remove outline on focus for non-interactive elements */
+.MuiTypography-root:focus {
+  outline: none;
+}
+
+/* Prevent caret/cursor appearance on non-editable elements */
+*:not(input):not(textarea):not([contenteditable="true"]):not(.ql-editor) {
+  caret-color: transparent;
+}
+
+/* ====================================
+   ANIMATIONS & TRANSITIONS
+   ==================================== */
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide in from left */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Spinner animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Apply fade-in animation */
+.fade-in {
+  animation: fadeIn var(--transition-normal) ease-in-out;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ====================================
+   MATERIAL-UI CUSTOMIZATIONS
+   ==================================== */
+
+/* Smooth transitions for MUI components */
+.MuiCard-root,
+.MuiPaper-root,
+.MuiButton-root,
+.MuiChip-root {
+  transition: all var(--transition-fast);
+}
+
+/* Card hover effects */
+.MuiCard-root:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Better button hover states */
+.MuiButton-root:hover {
+  transform: translateY(-1px);
+}
+
+/* Chip cursor pointer */
+.MuiChip-root.MuiChip-clickable {
+  cursor: pointer;
+}
+
+/* React Quill editor customization */
+.ql-toolbar.ql-snow {
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  border-color: rgba(0, 0, 0, 0.23);
+}
+
+.ql-container.ql-snow {
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  border-color: rgba(0, 0, 0, 0.23);
+}
+
+.ql-editor {
+  min-height: 200px;
+  font-size: 1.6rem;
+  line-height: 1.6;
+}
+
+.ql-editor:focus {
+  outline: none;
+}
+
+/* ====================================
+   UTILITY CLASSES
+   ==================================== */
+
+/* Text utilities */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Display utilities */
+.d-none {
+  display: none !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+/* Spacing utilities */
+.m-0 { margin: 0 !important; }
+.mt-1 { margin-top: var(--spacing-sm) !important; }
+.mb-1 { margin-bottom: var(--spacing-sm) !important; }
+.p-0 { padding: 0 !important; }
+.pt-1 { padding-top: var(--spacing-sm) !important; }
+.pb-1 { padding-bottom: var(--spacing-sm) !important; }
+
+/* Loading state */
+.loading {
+  pointer-events: none;
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Error state */
+.error {
+  color: var(--error-color);
+}
+
+/* Success state */
+.success {
+  color: var(--success-color);
+}
+
+/* ====================================
+   RESPONSIVE BREAKPOINTS
+   ==================================== */
+
+/* Mobile first approach */
+@media (min-width: 600px) {
+  /* Small tablets */
+  body {
+    font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 960px) {
+  /* Tablets and small desktops */
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1280px) {
+  /* Desktops */
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1920px) {
+  /* Large desktops */
+  .container {
+    max-width: 1536px;
+  }
+}
+
+/* ====================================
+   PRINT STYLES
+   ==================================== */
+
+@media print {
+  body {
+    background-color: white;
+    color: black;
+  }
+  
+  /* Hide interactive elements */
+  button,
+  .MuiButton-root,
+  .MuiIconButton-root,
+  .MuiAppBar-root,
+  nav {
+    display: none !important;
+  }
+  
+  /* Optimize for printing */
+  .MuiCard-root {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+  
+  /* Remove shadows */
+  * {
+    box-shadow: none !important;
+  }
+}
+
+/* ====================================
+   PERFORMANCE OPTIMIZATIONS
+   ==================================== */
+
+/* Hardware acceleration for transforms and opacity */
+.MuiCard-root,
+.MuiButton-root,
+.MuiChip-root {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize font rendering */
+body {
+  font-feature-settings: "kern" 1, "liga" 1;
+  font-kerning: normal;
+}
+
+/* Contain layout shifts */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Image loading optimization */
+img {
+  content-visibility: auto;
+}
+
+/* ====================================
+   BROWSER-SPECIFIC FIXES
+   ==================================== */
+
+/* iOS Safari input zoom fix */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
+}
+
+/* Firefox button fix */
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/* IE11 flexbox fixes */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .d-flex {
+    display: -ms-flexbox !important;
+  }
+}
+
+/* ====================================
+   END OF STYLESHEET
+   ==================================== */
