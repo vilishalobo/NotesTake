@@ -15,7 +15,7 @@ FROM nginx:stable-alpine
 
 # Copy the 'dist' (Vite) or 'build' (CRA) folder to Nginx's html folder
 # Note: Check if your build folder is named 'dist' or 'build'
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/client/dist /usr/share/nginx/html
 
 # Expose port 80 (standard for web traffic)
 EXPOSE 80
