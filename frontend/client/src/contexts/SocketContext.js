@@ -3,8 +3,10 @@ import io from 'socket.io-client';
 
 const SocketContext = createContext();
 
-// Add API_URL from environment variable
-const API_URL = process.env.REACT_APP_API_URL;
+// For K8s/Docker with Nginx Proxy: 
+// If REACT_APP_API_URL is "/api", the socket should connect to the root "/"
+// because Nginx handles the /socket.io path separately.
+const SOCKET_URL = window.location.origin; 
 
 export const useSocket = () => {
   return useContext(SocketContext);
@@ -17,18 +19,20 @@ export const SocketProvider = ({ children, user }) => {
   useEffect(() => {
     if (!user) return;
 
-    // Connect to Socket.IO server using environment variable
-    const newSocket = io(API_URL, {
+    // By passing SOCKET_URL (which is http://localhost in your case),
+    // the socket-client will hit the Nginx proxy on port 80.
+    const newSocket = io(SOCKET_URL, {
       autoConnect: true,
+      transports: ['websocket', 'polling'], // Allow both for better compatibility
     });
 
     newSocket.on('connect', () => {
-      console.log('✅ Connected to Socket.IO');
+      console.log('✅ Connected to Socket.IO via Proxy');
       setIsConnected(true);
     });
 
-    newSocket.on('disconnect', () => {
-      console.log('❌ Disconnected from Socket.IO');
+    newSocket.on('disconnect', (reason) => {
+      console.log('❌ Disconnected:', reason);
       setIsConnected(false);
     });
 

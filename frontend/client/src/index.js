@@ -305,5 +305,6 @@ if (process.env.NODE_ENV === "development") {
       });
     }
   };
-  // Uncomment to enable: reportWebVitals(console.log);
+  // Uncomment to enable: 
+  reportWebVitals(console.log);
 }

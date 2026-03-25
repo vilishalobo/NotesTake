@@ -19,7 +19,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import EmailIcon from "@mui/icons-material/Email";
 
-const API_URL = process.env.REACT_APP_API_URL
+//const API_URL = process.env.REACT_APP_API_URL
 
 const Login = () => {
   const [email, setEmail] = useState("");

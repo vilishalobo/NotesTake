@@ -136,7 +136,7 @@ const EditNote = ({ note, onUpdate, onCancel }) => {
     formData.append("image", file);
 
     try {
-      const response = await fetch(`${API_URL}/api/images/upload`, {
+      const response = await fetch(`${API_URL}/images/upload`, {
         method: "POST",
         body: formData,
       });
@@ -157,7 +157,7 @@ const EditNote = ({ note, onUpdate, onCancel }) => {
   // Remove image
   const removeImage = async (fileId) => {
     try {
-      await fetch(`${API_URL}/api/images/${fileId}`, {
+      await fetch(`${API_URL}/images/${fileId}`, {
         method: "DELETE",
       });
       setImages(images.filter((id) => id !== fileId));
@@ -185,7 +185,7 @@ const EditNote = ({ note, onUpdate, onCancel }) => {
     setError("");
 
     try {
-      const response = await fetch(`${API_URL}/api/ai/tags`, {
+      const response = await fetch(`${API_URL}/ai/tags`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -299,7 +299,7 @@ const EditNote = ({ note, onUpdate, onCancel }) => {
     setLoading(true);
 
     try {
-      await fetchWithRetry(`${API_URL}/api/notes/${note._id}`, {
+      await fetchWithRetry(`${API_URL}/notes/${note._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -495,7 +495,7 @@ const EditNote = ({ note, onUpdate, onCancel }) => {
                 {images.map((fileId) => (
                   <ImageListItem key={fileId}>
                     <img
-                      src={`${API_URL}/api/images/${fileId}`}
+                      src={`${API_URL}/images/${fileId}`}
                       alt="Note attachment"
                       loading="lazy"
                       style={{

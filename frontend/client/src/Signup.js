@@ -22,7 +22,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-const API_URL = process.env.REACT_APP_API_URL
+//const API_URL = process.env.REACT_APP_API_URL
 
 const Signup = () => {
   const [email, setEmail] = useState("");

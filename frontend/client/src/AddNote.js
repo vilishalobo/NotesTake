@@ -166,7 +166,7 @@ const AddNote = ({ userId, onNoteAdded }) => {
     formData.append('image', file);
 
     try {
-      const response = await fetch(`${API_URL}/api/images/upload`, {
+      const response = await fetch(`${API_URL}/images/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -187,7 +187,7 @@ const AddNote = ({ userId, onNoteAdded }) => {
   // Remove image
   const removeImage = async (fileId) => {
     try {
-      await fetch(`${API_URL}/api/images/${fileId}`, {
+      await fetch(`${API_URL}/images/${fileId}`, {
         method: 'DELETE',
       });
       setImages(images.filter(id => id !== fileId));
@@ -211,7 +211,7 @@ const AddNote = ({ userId, onNoteAdded }) => {
 
     setLoading(true);
     try {
-      const response = await fetchWithRetry(`${API_URL}/api/notes`, {
+      const response = await fetchWithRetry(`${API_URL}/notes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -261,7 +261,7 @@ const AddNote = ({ userId, onNoteAdded }) => {
 
     setLoadingTags(true);
     try {
-      const response = await fetchWithRetry(`${API_URL}/api/ai/tags`, {
+      const response = await fetchWithRetry(`${API_URL}/ai/tags`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ noteContent: plainText }),
@@ -448,7 +448,7 @@ const AddNote = ({ userId, onNoteAdded }) => {
                     {images.map((fileId) => (
                       <ImageListItem key={fileId}>
                         <img
-                          src={`${API_URL}/api/images/${fileId}`}
+                          src={`${API_URL}/images/${fileId}`}
                           alt="Note attachment"
                           loading="lazy"
                           style={{ height: 150, objectFit: 'cover', borderRadius: 8 }}

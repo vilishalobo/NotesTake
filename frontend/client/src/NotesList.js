@@ -165,7 +165,7 @@ const NoteCard = ({ note, onEdit, onDelete, onSummary, onShare, loadingSummary, 
               {note.images.map((fileId) => (
                 <ImageListItem key={fileId}>
                   <img
-                    src={`${API_URL}/api/images/${fileId}`}
+                    src={`${API_URL}/images/${fileId}`}
                     alt="Note attachment"
                     loading="lazy"
                     style={{ 
@@ -174,7 +174,7 @@ const NoteCard = ({ note, onEdit, onDelete, onSummary, onShare, loadingSummary, 
                       borderRadius: 8,
                       cursor: 'pointer'
                     }}
-                    onClick={() => window.open(`${API_URL}/api/images/${fileId}`, '_blank')}
+                    onClick={() => window.open(`${API_URL}/images/${fileId}`, '_blank')}
                   />
                 </ImageListItem>
               ))}
@@ -325,7 +325,7 @@ const NotesList = ({ userId, refresh }) => {
 
     try {
       const data = await fetchWithRetry(
-        `${API_URL}/api/notes?userId=${userId}`
+        `${API_URL}/notes?userId=${userId}`
       );
       setNotes(data);
       setFilteredNotes(data);
@@ -442,7 +442,7 @@ const NotesList = ({ userId, refresh }) => {
 
     try {
       const response = await fetch(
-        `${API_URL}/api/notes/${noteToShare._id}/share`,
+        `${API_URL}/notes/${noteToShare._id}/share`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -490,7 +490,7 @@ const NotesList = ({ userId, refresh }) => {
 
     try {
       const response = await fetch(
-        `${API_URL}/api/notes/${noteToDelete._id}`,
+        `${API_URL}/notes/${noteToDelete._id}`,
         { method: "DELETE" }
       );
 
@@ -531,7 +531,7 @@ const NotesList = ({ userId, refresh }) => {
     setError("");
 
     try {
-      const response = await fetch(`${API_URL}/api/ai/summary`, {
+      const response = await fetch(`${API_URL}/ai/summary`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ noteContent: plainText }),
